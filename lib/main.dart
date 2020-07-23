@@ -277,16 +277,20 @@ class _MapViewState extends State<MapView> {
   _createPolylines(Position start, Position destination) async {
     polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      Secrets.API_KEY, // Google Maps API Key
-      PointLatLng(start.latitude, start.longitude),
-      PointLatLng(destination.latitude, destination.longitude),
-      travelMode: TravelMode.transit,
-    );
+        Secrets.API_KEY, // Google Maps API Key
+        PointLatLng(start.latitude, start.longitude),
+        PointLatLng(destination.latitude, destination.longitude),
+        travelMode: TravelMode.transit,
+        avoidHighways: true,
+        avoidFerries: false,
+        avoidTolls: true);
 
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
+    } else {
+      print("Error drwaing polyline");
     }
 
     PolylineId id = PolylineId('poly');
